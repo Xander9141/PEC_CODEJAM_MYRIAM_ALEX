@@ -1,10 +1,28 @@
 <template>
   <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+    <router-link v-if="!isAuthenticated" to="/">Login</router-link> |
+    <router-link v-if="isAuthenticated" to="/home">Home</router-link> |
+    <router-link v-if="isAuthenticated" to="/recreation-reservations">Recreation Reservations</router-link> |
+    <router-link v-if="isAuthenticated" to="/work-reservations">Work Reservations</router-link>
   </nav>
   <router-view/>
 </template>
+
+<script>
+import { computed } from 'vue';
+import { useStore } from 'vuex';
+
+export default {
+  setup() {
+    const store = useStore();
+    const isAuthenticated = computed(() => store.getters.isAuthenticated);
+
+    return {
+      isAuthenticated
+    };
+  }
+}
+</script>
 
 <style>
 #app {
@@ -22,6 +40,7 @@ nav {
 nav a {
   font-weight: bold;
   color: #2c3e50;
+  margin-right: 10px;
 }
 
 nav a.router-link-exact-active {
